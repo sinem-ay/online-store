@@ -1,4 +1,4 @@
 .idea/
 __pycache__/
-config.py
+.env
 session_ex.py
