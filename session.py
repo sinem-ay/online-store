@@ -2,12 +2,14 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 from typing import Generator
+from functools import lru_cache
 
-from config import Settings
+from config import get_settings
 
-engine = create_engine(Settings().database_url, pool_pre_ping=True)
+engine = create_engine(get_settings().db_url, pool_pre_ping=True)
 
 
+@lru_cache()
 def create_session() -> scoped_session:
     session = scoped_session(
         sessionmaker(autocommit=False, autoflush=False, bind=engine)
