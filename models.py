@@ -16,13 +16,14 @@ class Product(Base):
     product_id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     product_name = db.Column(db.String(100), nullable=False)
     price = db.Column(db.Float, nullable=False)
+    new_products = relationship('Provider', backref='products')
 
 
 class Provider(Base):
     __tablename__ = 'providers'
 
     provider_id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    product = relationship('Product', backref='providers')
+    product_id = db.Column(ForeignKey('products.product_id'), primary_key=True)
     quantity = db.Column(db.Integer, nullable=False)
     total_price = db.Column(db.Float, nullable=False)  # quantity * products.price
     date = db.Column(db.DateTime, server_default=func.now())
