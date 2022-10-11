@@ -6,7 +6,7 @@ from functools import lru_cache
 
 from config import get_settings
 
-engine = create_engine(get_settings().db_url, pool_pre_ping=True)
+engine = create_engine(get_settings().db_url, pool_pre_ping=True, echo=True)
 
 
 @lru_cache()
