@@ -22,4 +22,4 @@ def get_session() -> Generator[scoped_session, None, None]:
     try:
         yield session
     finally:
-        session.close()
+        session.remove()
