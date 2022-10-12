@@ -22,10 +22,14 @@ class Provider(Base):
     __tablename__ = 'providers'
 
     provider_id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    product_id = db.Column(ForeignKey('products.product_id'), primary_key=True)
+    product_id = db.Column(ForeignKey('products.product_id'), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
     total_price = db.Column(db.Float, nullable=False)  # quantity * products.price
     date = db.Column(db.DateTime, server_default=func.now())
+    product = relationship(Product)
+
+    def __repr__(self):
+        return f'id: {self.product_id}, name: {self.product.name}'
 
 
 class Customer(Base):
