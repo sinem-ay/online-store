@@ -1,13 +1,10 @@
-import models
-import schemas
-import session
-import schemas
+from models import Product
+from schemas.product import Product, ProductCreate
 from sqlalchemy.orm import Session
-from typing import Any, List
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from session_ex import get_db
+from database.database_singleton import get_db
 
 app = APIRouter()
 
@@ -22,24 +19,24 @@ def get_products(
         db_session: Session = Depends(get_db),
 ):
     print('start')
-    products = db_session.query(models.Product).all()
+    products = db_session.query(Product).all()
     print(products)
     print(type(products))
     return products
 
 
-@app.post('/product', response_model=schemas.ProductCreate)
+@app.post('/product', response_model=ProductCreate)
 async def create_product(
-        product: schemas.Product,
-        db_session: Session = Depends(session.get_session),
+        product: Product,
+        db_session: Session = Depends(get_db),
 ):
-    db_product = db_session.query(models.Product). \
-        filter(models.Product.product_name == product.product_name).first()
+    db_product = db_session.query(Product). \
+        filter(Product.product_name == product.product_name).first()
 
     if db_product is not None:
         raise HTTPException(status_code=400, detail='Product already exists')
 
-    new_product = models.Product(
+    new_product = Product(
         product_name=product.product_name,
         price=product.price
     )
