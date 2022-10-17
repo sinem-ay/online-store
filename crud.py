@@ -7,14 +7,25 @@ from typing import Any, List
 
 from fastapi import APIRouter, Depends, HTTPException
 
+from session_ex import get_db
+
 app = APIRouter()
 
 
-@app.get('/products', response_model=schemas.Product)
-async def get_products(
-        db_session: Session = Depends(session.get_session),
-) -> List[models.Product]:
-    return db_session.query(models.Product).all()
+@app.get("/")
+async def root():
+    return {"message": "Hello World"}
+
+
+@app.get('/products')
+def get_products(
+        db_session: Session = Depends(get_db),
+):
+    print('start')
+    products = db_session.query(models.Product).all()
+    print(products)
+    print(type(products))
+    return products
 
 
 @app.post('/product', response_model=schemas.ProductCreate)
