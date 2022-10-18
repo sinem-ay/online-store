@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from pydantic.types import UUID4
 
 
-class Product(BaseModel):
+class ProductBase(BaseModel):
     product_id: UUID4
     product_name: str
     price: float
@@ -11,7 +11,7 @@ class Product(BaseModel):
         orm_mode = True
 
 
-class ProductCreate(Product):
+class ProductCreate(ProductBase):
     product_name: str
     price: float
 

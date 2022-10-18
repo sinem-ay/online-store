@@ -3,11 +3,10 @@ import uuid
 import sqlalchemy as sa
 from sqlalchemy import func
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.schema import ForeignKey, UniqueConstraint
 
-Base = declarative_base()
+from database.database_fast import Base
 
 
 class Product(Base):
