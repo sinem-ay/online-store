@@ -1,3 +1,3 @@
 export $(grep -v '^#' .env | xargs)
 
-uvicorn api.product:app --reload
+uvicorn api.product:router --reload

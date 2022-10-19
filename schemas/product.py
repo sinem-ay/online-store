@@ -10,10 +10,3 @@ class ProductBase(BaseModel):
     class Config:
         orm_mode = True
 
-
-class ProductCreate(ProductBase):
-    product_name: str
-    price: float
-
-    class Config:
-        orm_mode = True
