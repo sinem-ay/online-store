@@ -20,7 +20,7 @@ class Product(Base):
 class Provider(Base):
     __tablename__ = 'providers'
 
-    provider_id = sa.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    provider_id = sa.Column(sa.Integer, primary_key=True, nullable=False)
     product_id = sa.Column(ForeignKey('products.product_id'), nullable=False)
     quantity = sa.Column(sa.Integer, nullable=False)
     total_price = sa.Column(sa.Float, nullable=False)  # quantity * products.price
