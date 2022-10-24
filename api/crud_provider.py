@@ -5,12 +5,12 @@ from models import Provider
 from schemas.provider import ProviderBase, ProviderCreate
 
 
-def get_provider():
-    pass
+def get_providers(db: Session):
+    return db.query(Provider).all()
 
 
-def get_providers():
-    pass
+def get_provider(db: Session, provider_id: int):
+    return db.query(Provider).filter(provider_id == provider_id).first()
 
 
 def create_provider_by_product():
