@@ -18,3 +18,7 @@ class ProductCreate(ProductBase):
 
     class Config:
         orm_mode = True
+
+
+class ProductUpdate(ProductBase):
+    pass
