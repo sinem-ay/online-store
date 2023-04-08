@@ -7,8 +7,8 @@ class Settings(BaseSettings):
     db_url: PostgresDsn
 
     class Config:
-        env_file = '.env'
-        env_file_encoding = 'utf-8'
+        env_file = ".envrc"
+        env_file_encoding = "utf-8"
 
 
 @lru_cache()
