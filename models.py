@@ -1,39 +1,60 @@
 import uuid
+from datetime import datetime
+from typing import Optional, List
 
-import sqlalchemy as sa
+from sqlalchemy import Column, String, Float, Integer, DateTime
 from sqlalchemy import func
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, Mapped, mapped_column
 from sqlalchemy.sql.schema import ForeignKey, UniqueConstraint
 
-from database.database_fast import Base
+from database.database_singleton import Base
 
 
 class Product(Base):
-    __tablename__ = 'products'
+    __tablename__ = "product"
 
-    product_id = sa.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    product_name = sa.Column(sa.String(100), nullable=False)
-    price = sa.Column(sa.Float, nullable=False)
+    product_id = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    product_name: Mapped[str] = mapped_column(String(256), nullable=False)
+    unit_price: Mapped[float] = mapped_column(Float, nullable=False)
+    product_country: Mapped[Optional[str]]
+    time_created = mapped_column(DateTime(timezone=True), server_default=func.now())
+    time_updated = mapped_column(DateTime(timezone=True), onupdate=func.now())
 
 
 class Provider(Base):
-    __tablename__ = 'providers'
+    __tablename__ = "provider"
 
-    provider_id = sa.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    product_id = sa.Column(ForeignKey('products.product_id'), nullable=False)
-    quantity = sa.Column(sa.Integer, nullable=False)
-    total_price = sa.Column(sa.Float, nullable=False)  # quantity * products.price
-    date = sa.Column(sa.DateTime, server_default=func.now())
-    product = relationship(Product)
+    provider_id = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    quantity: Mapped[int] = mapped_column(Integer, nullable=False)
+    total_price: Mapped[float] = mapped_column(Float, nullable=False)
+    provide_date: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+    time_created = mapped_column(DateTime(timezone=True), server_default=func.now())
+    time_updated = mapped_column(DateTime(timezone=True), onupdate=func.now())
 
-    def __repr__(self):
-        return f'id: {self.product_id}, name: {self.product.name}'
 
+class ProductProviderAssociation(Base):
+    __tablename__ = "product_provider_association"
 
-class Customer(Base):
-    __tablename__ = 'customers'
-
-    customer_id = sa.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    customer_name = sa.Column(sa.String(100))
-    customer_email = sa.Column(sa.String(100), nullable=False)
+    id = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    product_id = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("product.product_id", ondelete="CASCADE"),
+        primary_key=True,
+        default=uuid.uuid4,
+    )
+    provider_id = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("provider.provider_id", ondelete="CASCADE"),
+        primary_key=True,
+        default=uuid.uuid4,
+    )
+    __table_args__ = (
+        UniqueConstraint(
+            "product_id",
+            "provider_id",
+            name="uix_product_provider_association",
+        ),
+    )

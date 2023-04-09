@@ -7,7 +7,9 @@ from models import Product
 from schemas.product import ProductBase, ProductCreate, ProductUpdate
 
 
-def get_products(db: Session, skip: Optional[int] = 0, limit: Optional[int] = 100) -> List[Product]:
+def get_products(
+    db: Session, skip: Optional[int] = 0, limit: Optional[int] = 100
+) -> List[Product]:
     if skip == 0 and limit == 0:
         return db.query(Product).all()
     return db.query(Product).offset(skip).limit(limit).all()
