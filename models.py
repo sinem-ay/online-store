@@ -20,6 +20,7 @@ class Product(Base):
     product_country: Mapped[Optional[str]]
     time_created = mapped_column(DateTime(timezone=True), server_default=func.now())
     time_updated = mapped_column(DateTime(timezone=True), onupdate=func.now())
+    providers = relationship(back_populates="product")
 
 
 class Provider(Base):
@@ -33,6 +34,7 @@ class Provider(Base):
     provide_date: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
     time_created = mapped_column(DateTime(timezone=True), server_default=func.now())
     time_updated = mapped_column(DateTime(timezone=True), onupdate=func.now())
+    products = relationship(back_populates="provider")
 
 
 class ProductProviderAssociation(Base):
@@ -51,6 +53,8 @@ class ProductProviderAssociation(Base):
         primary_key=True,
         default=uuid.uuid4,
     )
+    provider = relationship(back_populates="products")
+    product = relationship(back_populates="providers")
     __table_args__ = (
         UniqueConstraint(
             "product_id",
