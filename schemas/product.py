@@ -6,7 +6,7 @@ from uuid import uuid4
 
 class ProductBase(BaseModel):
     product_id: UUID4 = Field(default_factory=uuid4)
-    product_name: str = Field(default='', max_length=100)
+    product_name: str = Field(default="", max_length=100)
     price: float
 
     class Config:
