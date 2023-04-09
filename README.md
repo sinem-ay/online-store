@@ -8,7 +8,7 @@ Online grocery store app with using FastAPI, SQLAlchemy, Pydantic, PostgreSQL, a
 4. `./run.sh` in terminal
 
 # Project diagram [WIP]
-![](online_store_diagram.png)
+![](Online_Store_App_Diagramv2.png)
 
 # Resources:
 - Used project examples:
